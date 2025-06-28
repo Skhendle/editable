@@ -7,6 +7,7 @@ library editable;
 
 import 'package:flutter/material.dart';
 import 'commons/helpers.dart';
+import 'editable_theme.dart';
 import 'widgets/table_body.dart';
 import 'widgets/table_header.dart';
 
@@ -48,24 +49,24 @@ class Editable extends StatefulWidget {
       {Key? key,
       this.columns,
       this.rows,
-      this.columnRatio = 0.20,
+      this.columnRatio,
       this.onSubmitted,
       this.onRowSaved,
       this.columnCount = 0,
       this.rowCount = 0,
-      this.borderColor = Colors.grey,
-      this.tdPaddingLeft = 8.0,
-      this.tdPaddingTop = 8.0,
-      this.tdPaddingRight = 8.0,
-      this.tdPaddingBottom = 12.0,
-      this.thPaddingLeft = 8.0,
-      this.thPaddingTop = 0.0,
-      this.thPaddingRight = 8.0,
-      this.thPaddingBottom = 0.0,
-      this.trHeight = 50.0,
-      this.borderWidth = 0.5,
-      this.thWeight = FontWeight.w600,
-      this.thSize = 18,
+      this.borderColor,
+      this.tdPaddingLeft,
+      this.tdPaddingTop,
+      this.tdPaddingRight,
+      this.tdPaddingBottom,
+      this.thPaddingLeft,
+      this.thPaddingTop,
+      this.thPaddingRight,
+      this.thPaddingBottom,
+      this.trHeight,
+      this.borderWidth,
+      this.thWeight,
+      this.thSize,
       this.showSaveIcon = false,
       this.saveIcon = Icons.save,
       this.saveIconColor = Colors.black12,
@@ -86,9 +87,9 @@ class Editable extends StatefulWidget {
       this.createButtonColor,
       this.createButtonShape,
       this.createButtonLabel,
-      this.stripeColor1 = Colors.white,
-      this.stripeColor2 = Colors.black12,
-      this.zebraStripe = false,
+      this.stripeColor1,
+      this.stripeColor2,
+      this.zebraStripe,
       this.focusedBorder})
       : super(key: key);
 
@@ -150,65 +151,65 @@ class Editable extends StatefulWidget {
   /// sets the ratio of the screen width occupied by each column
   /// it is set in fraction between 0 to 1.0
   /// 0.8 indicates 80 percent width per column
-  final double columnRatio;
+  final double? columnRatio;
 
   /// Color of table border
-  final Color borderColor;
+  final Color? borderColor;
 
   /// width of table borders
-  final double borderWidth;
+  final double? borderWidth;
 
   /// Table data cell padding left
-  final double tdPaddingLeft;
+  final double? tdPaddingLeft;
 
   /// Table data cell padding top
-  final double tdPaddingTop;
+  final double? tdPaddingTop;
 
   /// Table data cell padding right
-  final double tdPaddingRight;
+  final double? tdPaddingRight;
 
   /// Table data cell padding bottom
-  final double tdPaddingBottom;
+  final double? tdPaddingBottom;
 
   /// Aligns the table data
-  final TextAlign tdAlignment;
+  final TextAlign? tdAlignment;
 
   /// Style the table data
   final TextStyle? tdStyle;
 
   /// Max lines allowed in editable text, default: 1 (longer data will not wrap and be hidden), setting to 100 will allow wrapping and not increase row size
-  final int tdEditableMaxLines;
+  final int? tdEditableMaxLines;
 
   /// Table header cell padding left
-  final double thPaddingLeft;
+  final double? thPaddingLeft;
 
   /// Table header cell padding top
-  final double thPaddingTop;
+  final double? thPaddingTop;
 
   /// Table header cell padding right
-  final double thPaddingRight;
+  final double? thPaddingRight;
 
   /// Table header cell padding bottom
-  final double thPaddingBottom;
+  final double? thPaddingBottom;
 
   /// Aligns the table header
-  final TextAlign thAlignment;
+  final TextAlign? thAlignment;
 
   /// Style the table header - use for more control of header style, using this OVERRIDES the thWeight and thSize parameters and those will be ignored.
   final TextStyle? thStyle;
 
   /// Table headers fontweight (use thStyle for more control of header style)
-  final FontWeight thWeight;
+  final FontWeight? thWeight;
 
   /// Table header label vertical alignment
-  final CrossAxisAlignment thVertAlignment;
+  final CrossAxisAlignment? thVertAlignment;
 
   /// Table headers fontSize  (use thStyle for more control of header style)
-  final double thSize;
+  final double? thSize;
 
   /// Table Row Height
   /// cannot be less than 40.0
-  final double trHeight;
+  final double? trHeight;
 
   /// Toogles the save button,
   /// if [true] displays an icon to save rows,
@@ -273,14 +274,14 @@ class Editable extends StatefulWidget {
   final Widget? createButtonLabel;
 
   /// The first row alternate color, if stripe is set to true
-  final Color stripeColor1;
+  final Color? stripeColor1;
 
   /// The Second row alternate color, if stripe is set to true
-  final Color stripeColor2;
+  final Color? stripeColor2;
 
   /// enable zebra-striping, set to false by default
   /// if enabled, you can style the colors [stripeColor1] and [stripeColor2]
-  final bool zebraStripe;
+  final bool? zebraStripe;
 
   final InputBorder? focusedBorder;
 
@@ -317,12 +318,40 @@ class EditableState extends State<Editable> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = EditableTheme.of(context);
     /// initial Setup of columns and row, sets count of column and row
     rowCount = rows == null || rows!.isEmpty ? widget.rowCount : rows!.length;
     columnCount =
         columns == null || columns!.isEmpty ? columnCount : columns!.length;
     columns = columns ?? columnBlueprint(columnCount, columns);
     rows = rows ?? rowBlueprint(rowCount!, columns, rows);
+
+    final columnRatio = widget.columnRatio ?? theme.columnRatio;
+    final borderColor = widget.borderColor ?? theme.borderColor;
+    final borderWidth = widget.borderWidth ?? theme.borderWidth;
+    final tdPaddingLeft = widget.tdPaddingLeft ?? theme.tdPaddingLeft;
+    final tdPaddingTop = widget.tdPaddingTop ?? theme.tdPaddingTop;
+    final tdPaddingRight = widget.tdPaddingRight ?? theme.tdPaddingRight;
+    final tdPaddingBottom = widget.tdPaddingBottom ?? theme.tdPaddingBottom;
+    final tdAlignment = widget.tdAlignment ?? theme.tdAlignment;
+    final tdStyle = widget.tdStyle ?? theme.tdStyle;
+    final tdEditableMaxLines =
+        widget.tdEditableMaxLines ?? theme.tdEditableMaxLines;
+    final thPaddingLeft = widget.thPaddingLeft ?? theme.thPaddingLeft;
+    final thPaddingTop = widget.thPaddingTop ?? theme.thPaddingTop;
+    final thPaddingRight = widget.thPaddingRight ?? theme.thPaddingRight;
+    final thPaddingBottom = widget.thPaddingBottom ?? theme.thPaddingBottom;
+    final thAlignment = widget.thAlignment ?? theme.thAlignment;
+    final thStyle = widget.thStyle ?? theme.thStyle;
+    final thWeight = widget.thWeight ?? theme.thWeight;
+    final thVertAlignment =
+        widget.thVertAlignment ?? theme.thVertAlignment;
+    final thSize = widget.thSize ?? theme.thSize;
+    final trHeight = widget.trHeight ?? theme.trHeight;
+    final stripeColor1 = widget.stripeColor1 ?? theme.stripeColor1;
+    final stripeColor2 = widget.stripeColor2 ?? theme.stripeColor2;
+    final zebraStripe = widget.zebraStripe ?? theme.zebraStripe;
+    final focusedBorder = widget.focusedBorder ?? theme.focusedBorder;
 
     /// Builds save snd remove Icons widget
 
@@ -382,21 +411,21 @@ class EditableState extends State<Editable> {
     List<Widget> _tableHeaders() {
       return List<Widget>.generate(columnCount! + 1, (index) {
         return columnCount! + 1 == (index + 1)
-            ? iconColumn(widget.showSaveIcon, widget.thPaddingTop,
-                widget.thPaddingBottom)
+            ? iconColumn(widget.showSaveIcon, thPaddingTop,
+                thPaddingBottom)
             : THeader(
                 widthRatio: columns![index]['widthFactor'] != null
                     ? columns![index]['widthFactor'].toDouble()
-                    : widget.columnRatio,
-                thAlignment: widget.thAlignment,
-                thStyle: widget.thStyle,
-                thPaddingLeft: widget.thPaddingLeft,
-                thPaddingTop: widget.thPaddingTop,
-                thPaddingBottom: widget.thPaddingBottom,
-                thPaddingRight: widget.thPaddingRight,
+                    : columnRatio,
+                thAlignment: thAlignment,
+                thStyle: thStyle,
+                thPaddingLeft: thPaddingLeft,
+                thPaddingTop: thPaddingTop,
+                thPaddingBottom: thPaddingBottom,
+                thPaddingRight: thPaddingRight,
                 headers: columns,
-                thWeight: widget.thWeight,
-                thSize: widget.thSize,
+                thWeight: thWeight!,
+                thSize: thSize!,
                 index: index);
       });
     }
@@ -413,7 +442,7 @@ class EditableState extends State<Editable> {
             var ceditable = <bool>[];
             columns!.forEach((e) {
               ckeys.add(e['key']);
-              cwidths.add(e['widthFactor'] ?? widget.columnRatio);
+              cwidths.add(e['widthFactor'] ?? columnRatio);
               ceditable.add(e['editable'] ?? true);
             });
             var list = rows![index];
@@ -422,24 +451,24 @@ class EditableState extends State<Editable> {
                 : RowBuilder(
                     index: index,
                     col: ckeys[rowIndex],
-                    trHeight: widget.trHeight,
-                    borderColor: widget.borderColor,
-                    borderWidth: widget.borderWidth,
+                    trHeight: trHeight,
+                    borderColor: borderColor,
+                    borderWidth: borderWidth,
                     cellData: list[ckeys[rowIndex]],
-                    tdPaddingLeft: widget.tdPaddingLeft,
-                    tdPaddingTop: widget.tdPaddingTop,
-                    tdPaddingBottom: widget.tdPaddingBottom,
-                    tdPaddingRight: widget.tdPaddingRight,
-                    tdAlignment: widget.tdAlignment,
-                    tdStyle: widget.tdStyle,
-                    tdEditableMaxLines: widget.tdEditableMaxLines,
+                    tdPaddingLeft: tdPaddingLeft,
+                    tdPaddingTop: tdPaddingTop,
+                    tdPaddingBottom: tdPaddingBottom,
+                    tdPaddingRight: tdPaddingRight,
+                    tdAlignment: tdAlignment,
+                    tdStyle: tdStyle,
+                    tdEditableMaxLines: tdEditableMaxLines,
                     onSubmitted: widget.onSubmitted,
                     widthRatio: cwidths[rowIndex].toDouble(),
                     isEditable: ceditable[rowIndex],
-                    zebraStripe: widget.zebraStripe,
-                    focusedBorder: widget.focusedBorder,
-                    stripeColor1: widget.stripeColor1,
-                    stripeColor2: widget.stripeColor2,
+                    zebraStripe: zebraStripe,
+                    focusedBorder: focusedBorder,
+                    stripeColor1: stripeColor1,
+                    stripeColor2: stripeColor2,
                     onChanged: (value) {
                       ///checks if row has been edited previously
                       var result = editedRows.indexWhere((element) {
@@ -473,14 +502,14 @@ class EditableState extends State<Editable> {
             //Table Header
             createButton(),
             Container(
-              padding: EdgeInsets.only(bottom: widget.thPaddingBottom),
+              padding: EdgeInsets.only(bottom: thPaddingBottom),
               decoration: BoxDecoration(
                   border: Border(
                       bottom: BorderSide(
-                          color: widget.borderColor,
-                          width: widget.borderWidth))),
+                          color: borderColor,
+                          width: borderWidth))),
               child: Row(
-                  crossAxisAlignment: widget.thVertAlignment,
+                  crossAxisAlignment: thVertAlignment!,
                   mainAxisSize: MainAxisSize.min,
                   children: _tableHeaders()),
             ),
