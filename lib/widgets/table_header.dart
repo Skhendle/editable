@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../editable_theme.dart';
+import 'editable_theme.dart';
 
 class THeader extends StatelessWidget {
   ///Builds elements for the table headers

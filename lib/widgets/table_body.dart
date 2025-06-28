@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../editable_theme.dart';
+import 'editable_theme.dart';
 
 class RowBuilder extends StatefulWidget {
   ///Builds row elements for the table
